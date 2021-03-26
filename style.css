@@ -12,45 +12,21 @@ body {
 #green-btn { grid-area: 1 / 4 / 4 / 7; }
 #blue-btn { grid-area: 4 / 1 / 7 / 4; }
 #yellow-btn { grid-area: 4 / 4 / 7 / 7; }
-.score-div { grid-area: 3 / 3 / 5 / 5; } 
+.score-div { grid-area: 3 / 3 / 5 / 5; position: relative; z-index: 10;} 
 
 button {
     outline: none;
 }
 
-#red-btn {
-    background-color: rgb(255, 0, 0);
-}
+#red-btn {    background-color: rgb(255, 0, 0); }
+#green-btn {  background-color: rgb(0, 128, 0); }
+#blue-btn {   background-color: rgb(0, 0, 255); }
+#yellow-btn { background-color: rgb(255, 255, 100); }
 
-#red-btn:active {
-    background-color: rgb(144, 0, 0);
+.lit {
+    box-shadow: inset 0 0 100px 30px rgba(0, 0, 0, 0.5);
+    filter: brightness(67%);
 }
-
-#green-btn {
-    background-color: rgb(0, 128, 0);
-}
-
-#green-btn:active {
-    background-color: rgb(0, 69, 0);
-}
-
-#blue-btn {
-    background-color: rgb(0, 0, 255);
-}
-
-#blue-btn:active {
-    background-color: rgb(0, 0, 144);
-}
-
-#yellow-btn {
-    background-color: rgb(255, 255, 100);
-}
-
-#yellow-btn:active {
-    background-color: rgb(144, 144, 0);
-}
- 
-
 
 .score-div {
     border-radius: 9999px;
