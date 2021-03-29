@@ -8,8 +8,12 @@ let sequence = [];
 let copyOfSequence = [];
 
 
+const highScore = document.getElementById('high-score-display');
 if (!localStorage.getItem('highScore')) {
     localStorage.setItem('highScore', sequence.length)
+}
+else {
+    highScore.innerText = localStorage.getItem('highScore');
 }
 
 const colors = {
@@ -45,7 +49,6 @@ function playRound() {
 }
 
 const currentScore = document.getElementById('current-score-display');
-const highScore = document.getElementById('high-score-display');
 let canClick = false
 function playerBtnClick(e) {
     if (!canClick) return
@@ -69,12 +72,15 @@ function playerBtnClick(e) {
     }
     else {
         canClick = false
-        
+
         gameOver = true
         startBtn.innerHTML = "Wrong color!<br /> Play again?"
         startBtn.disabled = false
 
-        localStorage.setItem('highScore', round - 1);
+        if (round - 1 > localStorage.getItem('highScore')) {
+            localStorage.setItem('highScore', round - 1);
+        }
+
         highScore.innerText = round - 1;
 
         round = 1;
@@ -115,7 +121,7 @@ const flashFromClick = (panelElement) => {
         // Wait then unlight current btn
         setTimeout(() => {
             panelElement.classList.remove('clicked');
-        }, 200)
+        }, 400)
 
         setTimeout(() => {
             resolve();
@@ -125,6 +131,7 @@ const flashFromClick = (panelElement) => {
 
 
 const flashSequence = async (copyOfSequence) => {
+    canClick = false
     startBtn.innerText = "Pay attention"
     startBtn.style.backgroundColor = "#7f0000"
     startBtn.style.color = "#fff"
