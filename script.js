@@ -1,18 +1,15 @@
 const startBtn = document.getElementById('startBtn');
-const btns = document.querySelectorAll('body > button');
+const documentBtns = document.querySelectorAll('body > button');
 
-btns.forEach(btn => {
-    btn.addEventListener('mousedown', (e) => {
-        e.target.classList.add('lit')
-    })
-    btn.addEventListener('mouseup', (e) => {
-        e.target.classList.remove('lit')
-    })
-})
+// Activate eventListeners
+documentBtns.forEach(btn => {
+    btn.addEventListener('mousedown', playerBtnClick)
+});
 
-startBtn.addEventListener('click', startRound);
+startBtn.addEventListener('click', playRound);
 
 let sequence = [];
+let copyOfSequence = [];
 
 const colors = {
     1: 'red',
@@ -21,47 +18,114 @@ const colors = {
     4: 'yellow'
 }
 
-function startRound() {
-    let gameOver = false
-    let round = 1;
-    // Move startbutton off screen
-    do {
-        console.log("Round ", round)
-        let nextColor = colors[getRandomIntInclusive(1, 4)];
-        sequence.push(nextColor)
+let round = 1;
+let gameOver = false
+function playRound() {
+    startBtn.disabled = true;
+    if (gameOver == true) startBtn.disabled = false;
+    console.log("Round ", round)
 
+    // Add new random color to sequence
+    let nextColor = colors[getRandomIntInclusive(1, 4)];
+    sequence.push(nextColor)
 
-        lightUpSequence(0, sequence)
+    // Show current sequence to user
+    console.log("Sequence: ", sequence);
 
-        // Turn off all lights
-        
+    // Flash btns from sequence
+    flashSequence(sequence)
 
-        round++;
-        if (true) gameOver = true
-    } while (!gameOver)
+    //Copy sequence to array we want to change
+    copyOfSequence = [...sequence]
 }
 
-function lightUpSequence(counter, sequence) {
-    if (counter < sequence.length) {
-        setTimeout(() => {
-            //Light up correct button
-            console.log("Color lit: ", sequence[counter]);
+let canClick = false
+function playerBtnClick(e) {
+    if (!canClick) return
 
-            // Clear lit class from all btns
-            btns.forEach(btn => btn.classList.remove('lit'));
+    const btnClicked = e.target;
+    const colorClicked = e.target.dataset.color;
+    const colorExpected = copyOfSequence.shift();
 
-            const litBtn = [...btns].find(btn => btn.dataset.color == sequence[counter])
-            console.log("Lit btn: ", litBtn)
-            console.log("litBtn.classlist: ", litBtn.classList)
-            litBtn.classList.add('lit')
-
-            counter++;
-            lightUpSequence(counter, sequence);
-        }, 500);
+    if (colorExpected == colorClicked) {
+        flashFromClick(btnClicked)
+        if (copyOfSequence.length == 0) {
+            startBtn.innerText = "Good job!"
+            startBtn.style.backgroundColor = "#33ffe6"
+            setTimeout(() => {
+                round++;
+                playRound()
+            }, 1000)
+        }
+    }
+    else {
+        gameOver = true
+        startBtn.innerHTML = "Wrong color!<br /> Play again?"
+        startBtn.disabled = false
+        round = 1;
+        sequence = []
     }
 }
 
 
+const flashInSequence = (panelElement) => {
+    return new Promise(resolve => {
+
+        // Wait then light current btn
+        setTimeout(() => {
+            panelElement.classList.add('lit');
+        }, 100)
+
+        // Wait then unlight current btn
+        setTimeout(() => {
+            panelElement.classList.remove('lit')
+        }, 500)
+
+        // Wait then start time for next btn in sequence
+        setTimeout(() => {
+            resolve();
+        }, 600)
+    })
+}
+
+const flashFromClick = (panelElement) => {
+    return new Promise(resolve => {
+
+        setTimeout(() => {
+            // Light up current btn
+            console.log("panelElement:",panelElement)
+            panelElement.classList.add('clicked');
+            console.log("panelElement.classList:",panelElement.classList)
+        }, 100)
+
+        // Wait then unlight current btn
+        setTimeout(() => {
+            panelElement.classList.remove('clicked');
+        }, 200)
+
+        setTimeout(() => {
+            resolve();
+        }, 800)
+    })
+}
+
+
+const flashSequence = async (copyOfSequence) => {
+    startBtn.innerText = "Pay attention"
+    startBtn.style.backgroundColor = "#7f0000"
+    startBtn.style.color = "#fff"
+    for (const btn of copyOfSequence) {
+        const currentBtn = [...documentBtns].find(element => element.dataset.color == btn)
+        await flashInSequence(currentBtn)
+    }
+    setTimeout(() => {
+        startBtn.innerText = "Your turn"
+        startBtn.style.color = "#000"
+        startBtn.style.backgroundColor = "#e5e500"
+        canClick = true
+    }, 200)
+
+}
 
 
 
