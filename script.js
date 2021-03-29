@@ -1,15 +1,16 @@
-const startBtn = document.getElementById('startBtn');
 const documentBtns = document.querySelectorAll('body > button');
-
-// Activate eventListeners
 documentBtns.forEach(btn => {
     btn.addEventListener('mousedown', playerBtnClick)
 });
 
-startBtn.addEventListener('click', playRound);
 
 let sequence = [];
 let copyOfSequence = [];
+
+
+if (!localStorage.getItem('highScore')) {
+    localStorage.setItem('highScore', sequence.length)
+}
 
 const colors = {
     1: 'red',
@@ -20,6 +21,10 @@ const colors = {
 
 let round = 1;
 let gameOver = false
+
+const startBtn = document.getElementById('startBtn');
+startBtn.addEventListener('click', playRound);
+
 function playRound() {
     startBtn.disabled = true;
     if (gameOver == true) startBtn.disabled = false;
@@ -39,6 +44,8 @@ function playRound() {
     copyOfSequence = [...sequence]
 }
 
+const currentScore = document.getElementById('current-score-display');
+const highScore = document.getElementById('high-score-display');
 let canClick = false
 function playerBtnClick(e) {
     if (!canClick) return
@@ -52,7 +59,9 @@ function playerBtnClick(e) {
         if (copyOfSequence.length == 0) {
             startBtn.innerText = "Good job!"
             startBtn.style.backgroundColor = "#33ffe6"
+
             setTimeout(() => {
+                currentScore.innerText = round
                 round++;
                 playRound()
             }, 1000)
@@ -62,8 +71,13 @@ function playerBtnClick(e) {
         gameOver = true
         startBtn.innerHTML = "Wrong color!<br /> Play again?"
         startBtn.disabled = false
+
+        localStorage.setItem('highScore', round - 1);
+        highScore.innerText = round - 1;
+
         round = 1;
         sequence = []
+        currentScore.innerText = sequence.length
     }
 }
 
@@ -93,9 +107,7 @@ const flashFromClick = (panelElement) => {
 
         setTimeout(() => {
             // Light up current btn
-            console.log("panelElement:",panelElement)
             panelElement.classList.add('clicked');
-            console.log("panelElement.classList:",panelElement.classList)
         }, 100)
 
         // Wait then unlight current btn
