@@ -68,6 +68,8 @@ function playerBtnClick(e) {
         }
     }
     else {
+        canClick = false
+        
         gameOver = true
         startBtn.innerHTML = "Wrong color!<br /> Play again?"
         startBtn.disabled = false
