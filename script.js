@@ -32,16 +32,12 @@ startBtn.addEventListener('click', playRound);
 function playRound() {
     startBtn.disabled = true;
     if (gameOver == true) startBtn.disabled = false;
-    console.log("Round ", round)
 
     // Add new random color to sequence
     let nextColor = colors[getRandomIntInclusive(1, 4)];
     sequence.push(nextColor)
 
     // Show current sequence to user
-    console.log("Sequence: ", sequence);
-
-    // Flash btns from sequence
     flashSequence(sequence)
 
     //Copy sequence to array we want to change
@@ -93,10 +89,7 @@ function playerBtnClick(e) {
 const flashInSequence = (panelElement) => {
     return new Promise(resolve => {
 
-        // Wait then light current btn
-        //setTimeout(() => {
-            panelElement.classList.add('lit');
-        //}, 1)
+        panelElement.classList.add('lit');
 
         // Wait then unlight current btn
         setTimeout(() => {
