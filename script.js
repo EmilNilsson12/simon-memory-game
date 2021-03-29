@@ -75,9 +75,9 @@ function playerBtnClick(e) {
 
         if (round - 1 > localStorage.getItem('highScore')) {
             localStorage.setItem('highScore', round - 1);
+            highScore.innerText = round - 1;
         }
 
-        highScore.innerText = round - 1;
 
         round = 1;
         sequence = []
