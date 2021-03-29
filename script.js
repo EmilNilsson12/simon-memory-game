@@ -86,9 +86,9 @@ const flashInSequence = (panelElement) => {
     return new Promise(resolve => {
 
         // Wait then light current btn
-        setTimeout(() => {
+        //setTimeout(() => {
             panelElement.classList.add('lit');
-        }, 100)
+        //}, 1)
 
         // Wait then unlight current btn
         setTimeout(() => {
