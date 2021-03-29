@@ -24,14 +24,12 @@ const colors = {
 }
 
 let round = 1;
-let gameOver = false
 
 const startBtn = document.getElementById('startBtn');
 startBtn.addEventListener('click', playRound);
 
 function playRound() {
     startBtn.disabled = true;
-    if (gameOver == true) startBtn.disabled = false;
 
     // Add new random color to sequence
     let nextColor = colors[getRandomIntInclusive(1, 4)];
@@ -69,7 +67,6 @@ function playerBtnClick(e) {
     else {
         canClick = false
 
-        gameOver = true
         startBtn.innerHTML = "Wrong color!<br /> Play again?"
         startBtn.disabled = false
 
