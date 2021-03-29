@@ -51,6 +51,7 @@ button, button:focus {
     flex-direction: column;
     margin-top: 40px;
     font-size: x-large;
+    color: white;
 }
 
 .score-div button {
